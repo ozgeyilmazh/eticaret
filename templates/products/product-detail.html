@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+   <!-- ##### Single Product Details Area Start ##### -->
+    <section class="single_product_details_area d-flex align-items-center">
+
+        <!-- Single Product Thumb -->
+        <div class="single_product_thumb clearfix">
+            <div class="product_thumbnail_slides owl-carousel">
+                {% if items.cover_image %}
+                    <img src="{{ items.cover_image.url }}" alt="">
+                     {% else %}
+                        resim yok
+                    {% endif %}
+                    <!-- Hover Thumb -->
+                {% if items.hover_image %}
+                    <img class="hover-img" src="{{ items.hover_image.url }}" alt="">
+                     {% else %}
+                        resim yok
+             {% endif %}
+            </div>
+        </div>
+
+        <!-- Single Product Description -->
+        <div class="single_product_desc clearfix">
+            <span>mango</span>
+            <a href="cart.html">
+                <h2>{{items.title}}</h2>
+            </a>
+            <p class="product-price"><span class="old-price">${{items.price}}</span> ${{items.salePrice}}</p>
+            <p class="product-desc">{{items.content}}</p>
+
+            <!-- Form -->
+            <form action="/orders/addtocart/{{ items.id }}" method="POST">
+                  {% csrf_token %}
+                        <div class="qty-input">
+                        {{ form.as_p }}
+                        </div>
+                  <input class="primary-btn pd-to-cart" type="submit" value="Add to Cart">
+            </form>
+        </div>
+    </section>
+    <!-- ##### Single Product Details Area End ##### -->
+
+{% endblock %}
+
+    

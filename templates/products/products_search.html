@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+ <div class="container">
+              <div class="row">
+                <div class="col-12">
+                    <table class="table table-image">
+                      <thead>
+                        <tr>
+                          <th scope="col">    Image</th>
+                          <th scope="col">    Category</th>
+                          <th scope="col">    Product Title</th>
+                          <th scope="col">    Price</th>
+
+                        </tr>
+                      </thead>
+                      <tbody>
+                          {% for item in products %}
+                                <tr>
+                                    <td class="w-25">
+                                        {% if item.cover_image %}
+                                            <img src="{{ item.cover_image.url }}" class="img-fluid img-thumbnail">
+                                            {% else %}
+                                                resim yok
+                                        {% endif %}
+
+                                    </td>
+                                    <td>
+                                        <a href="/products/detail/{{ item.pk }}"><h5>{{item.title}}</h5></a>
+                                    </td>
+                                    <td><a href="{% url 'category_show' category_slug=item.category.slug %}">{{item.category.title}}</a></td>
+                                   
+                                    <td>{{item.salePrice}} TL</td>
+                                </tr>
+                        {% endfor %}
+
+                      </tbody>
+                    </table>   
+                </div>
+              </div>
+
+
+{% endblock %}

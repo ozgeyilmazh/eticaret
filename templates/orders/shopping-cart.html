@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<br>
+<br>
+<br>
+<br><br><br>
+<div class="container">
+   <div class="row">
+       <div class="<col-md-12></col-md-12>">
+           <h1>Welcome {{request.user}}</h1>
+           <br>
+       </div>
+   </div>
+   <hr>
+    <div class="row">
+        <div class="col-md-3">
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item"><a href="{% url 'shopcart' %}">Sepetim</a></li>
+              <li class="list-group-item"><a href="{% url 'order_index' %}">Siparişlerim</a></li>
+            </ul>
+        </div>
+        <div class="col-md-9">
+            <h1 style="text-align : center">Sepetim</h1>
+
+            <div class="container">
+              <div class="row">
+                <div class="col-12">
+                    <table class="table table-image">
+                      <thead>
+                        <tr>
+                          <th scope="col">    Image</th>
+                          <th scope="col">    Title</th>
+                          <th scope="col">    Price</th>
+                          <th scope="col">    Quantity</th>
+                          <th scope="col">    Total</th>
+                          <th scope="col">    Delete</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                     {% for item in shopcart %}
+                        <tr>
+                          <td class="w-25">
+                          {% if item.product.cover_image %}
+                                    <img src="{{ item.product.cover_image.url }}" class="img-fluid img-thumbnail">
+                                  {% else %}
+                                       resim yok
+                                  {% endif %}
+                          </td>
+                          <td>{{item.product}}</td>
+                          <td>{{item.product.salePrice}}</td>
+                          <td>{{item.quantity}}</td>
+                          <td>{{carttotal}}</td>
+                          <td><a href="/orders/deletefromcart/{{item.id}}" class="btn btn-danger">Del</a></td>
+
+                        </tr>
+                        {% endfor %}
+
+                      </tbody>
+                    </table>   
+                </div>
+              </div>
+            </div>
+                    </div>
+                </div>    
+            </div>
+
+
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% if user.is_authenticated %}
+
+{% else %}
+
+
+<div style="margin-top: 50px; margin-bottom: 50px;">
+    <div class="Lwrapper">
+        <form class="Lform-signin" method="POST">
+            {% csrf_token %}
+            <center>
+                <h2 class="Lform-signin-heading">Please login</h2>
+                <br> Email <br> {{ form.username }}
+                <br> Password<br> {{ form.password }}
+                <br>
+                <br>
+                <button class="btn btn-lg btn-secondary" type="submit">Login</button>
+                <p><a href="{% url 'password_reset' %}">Lost password?</a></p>
+            </center>
+        </form>
+    </div>
+</div>
+{% endif %}
+
+
+{% endblock content %}

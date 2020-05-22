@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<div style="margin-top: 50px; margin-bottom: 50px;">
+    <div class="Lwrapper">
+
+    <form class="Lform-signin" method="POST">
+        {% csrf_token %}
+        <center>
+            <h2 class="Lform-signin-heading">Please Sign Up</h2>
+            <br> Email<br> {{ form.email }}
+            <br> Username<br> {{ form.username }}
+            <br> Password<br> {{ form.password }}
+            <br> Password Again<br> {{ form.confirm }}
+            <br><br>
+            <button class="btn btn-lg btn-secondary" type="submit"> Register </button>
+        </center>
+    </form>
+
+</div>
+</div>
+
+{% endblock content %}

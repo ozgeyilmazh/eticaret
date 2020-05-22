@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+    <!-- ##### Breadcumb Area Start ##### -->
+    <div class="breadcumb_area bg-img" style="background-image: url({% static 'img/bg-img/breadcumb.jpg' %});">
+        <div class="container h-100">
+            <div class="row h-100 align-items-center">
+                <div class="col-12">
+                    <div class="page-title text-center">
+                        <h2>dresses</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ##### Breadcumb Area End ##### -->
+
+    <!-- ##### Shop Grid Area Start ##### -->
+    <section class="shop_grid_area section-padding-80">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 col-md-4 col-lg-3">
+                    <div class="shop_sidebar_area">
+
+                        <!-- ##### Single Widget ##### -->
+                        <div class="widget catagory mb-50">
+                            <!-- Widget Title -->
+                            <h6 class="widget-title mb-30">Catagories</h6>
+
+                            <!--  Catagories  -->
+                            <div class="catagories-menu">
+                                <ul id="menu-content2" class="menu-content collapse show">
+                                    <!-- Single Item -->
+                                    <li data-toggle="collapse" data-target="#clothing">
+                                        <ul class="sub-menu collapse show" id="clothing">
+                                            <h4>Women</h4>
+                                           {% for cat in categories %}
+                                            {% if cat.type == 'women' %}
+                                            <li><a href="{% url 'category_show' category_slug=cat.slug %}">{{cat.title}}</a></li>
+                                            {% endif %}
+                                             {% endfor %}
+                                             <h4>Men</h4>
+                                        {% for cat in categories %}
+                                            {% if cat.type == 'men' %}
+                                            <li><a href="{% url 'category_show' category_slug=cat.slug %}">{{cat.title}}</a></li>
+                                            {% endif %}
+                                          {% endfor %}
+                                                   <h4>Unisex</h4>
+                                        {% for cat in categories %}
+                                            {% if cat.type == 'unisex' %}
+                                            <li><a href="{% url 'category_show' category_slug=cat.slug %}">{{cat.title}}</a></li>
+                                            {% endif %}
+                                          {% endfor %}
+                                        </ul>
+                                    </li>
+
+                                </ul>
+                            </div>
+                        </div>
+
+                        </div>
+
+
+                </div>
+
+                <div class="col-12 col-md-8 col-lg-9">
+                    <div class="shop_grid_product_area">
+                        <div class="row">
+                            
+                        </div>
+
+                        <div class="row">
+                        {% for item in items %}
+                            <!-- Single Product -->
+                            <div class="col-12 col-sm-6 col-lg-4">
+                                <div class="single-product-wrapper">
+                                    <!-- Product Image -->
+                                    <div class="product-img">
+                                        {% if item.cover_image %}
+                                        <img src="{{ item.cover_image.url }}" alt="">
+                                         {% else %}
+                                            resim yok
+                                         {% endif %}
+                                        <!-- Hover Thumb -->
+                                         {% if item.hover_image %}
+                                            <img class="hover-img" src="{{ item.hover_image.url }}" alt="">
+                                         {% else %}
+                                            resim yok
+                                         {% endif %}
+
+                                        <!-- Product Badge -->
+                                        <div class="product-badge offer-badge">
+                                            <span>-30%</span>
+                                        </div>
+                                        <!-- Favourite -->
+                                        <div class="product-favourite">
+                                            <a href="#" class="favme fa fa-heart"></a>
+                                        </div>
+                                    </div>
+
+                                    <!-- Product Description -->
+                                    <div class="product-description">
+                                        <span>topshop</span>
+                                        <a href="/products/detail/{{ item.pk }}">
+                                            <h6>{{item.title}}</h6>
+                                        </a>
+                                        <p class="product-price"><span class="old-price">${{item.price}}</span> ${{item.salePrice}}</p>
+
+                                        <!-- Hover Content -->
+                                        <div class="hover-content">
+                                            <!-- Add to Cart -->
+                                            <div class="add-to-cart-btn">
+                                                <a href="/products/detail/{{ item.pk }}" class="btn essence-btn">Go Detail</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        {% endfor %}
+                        </div>
+                    </div>
+                    <!-- Pagination -->
+                    <nav aria-label="navigation">
+                        <ul class="pagination mt-50 mb-70">
+                           {% if items.has_previous %}
+                                <li class="page-item"><a class="page-link" href="?page={{ items.previous_page_number }}"><i class="fa fa-angle-left"></i></a></li>
+                            {% endif %}
+                            
+                            <li class="page-item"><a class="page-link" href="#">{{ items.number }}</a></li>
+                             {% if items.has_next %}
+                            <li class="page-item"><a class="page-link" href="?page={{ items.next_page_number }}"><i class="fa fa-angle-right"></i></a></li>
+                            {% endif %}
+                            
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- ##### Shop Grid Area End ##### -->
+
+{% endblock %}
+

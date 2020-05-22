@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+<br><br><br>
+<div class="container">
+   <div class="row">
+       <div class="<col-md-12></col-md-12>">
+           <h1>Welcome {{request.user}}</h1>
+           <br>
+       </div>
+   </div>
+   <hr>
+    <div class="row">
+        <div class="col-md-3">
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item"><a href="{% url 'shopcart' %}">Sepetim</a></li>
+              <li class="list-group-item"><a href="{% url 'order_index' %}">Siparişlerim</a></li>
+            </ul>
+        </div>
+        <div class="col-md-9">
+        
+  <h1 style="text-align : center">Sipariş Detay Sayfası</h1>
+ <div class="container">
+              <div class="row">
+                <div class="col-12">
+                    <table class="table table-image">
+                      <thead>
+                        <tr>
+                          <th scope="col">    Adı</th>
+                          <th scope="col">    Soyadı</th>
+                          <th scope="col">    Cep Telefonu</th>
+                          <th scope="col">    Adres</th>
+                          <th scope="col">    Detay</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                          <td>{{order.name}}</td>
+                          <td>{{order.surname}}</td>
+                          <td>{{order.phone}}</td>
+                          <td>{{order.address}}</td>
+                          <td>{{order.total}}</td>
+
+                      </tbody>
+                    </table>   
+                </div>
+              </div>
+            </div>
+
+
+
+<h1 style="text-align : center">Ürünlerim</h1>
+            <div class="container">
+              <div class="row">
+                <div class="col-12">
+                    <table class="table table-image">
+                      <thead>
+                        <tr>
+                          <th scope="col">    Resim</th>
+                          <th scope="col">    Başlık</th>
+                          <th scope="col">    Fiyat</th>
+                          <th scope="col">    Adet</th>
+                          <th scope="col">    Tarih</th>
+                          <th scope="col">    Durum</th>
+                          <th scope="col">    Note</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                     {% for item in items %}
+                        <tr>
+                          <td class="w-25">
+                              {% if item.product.cover_image %}
+                                <img src="{{ item.product.cover_image.url }}" class="img-fluid img-thumbnail">
+                              {% else %}
+                                   resim yok
+                              {% endif %}
+
+                          </td>
+                          <td>{{item.product.title}}</td>
+                          <td>{{item.product.salePrice}}</td>
+                          <td>{{item.quantity}}</td>
+                          <td>{{item.product.created_at}}</td>
+                          <td>{{order.status}}</td>
+                          <td>{{order.note}}</td>
+
+                        </tr>
+                        {% endfor %}
+
+                      </tbody>
+                    </table>   
+                </div>
+              </div>
+            </div>
+
+        </div>
+    </div>    
+</div>
+ 
+{% endblock %}

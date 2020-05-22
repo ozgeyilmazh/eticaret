@@ -1,0 +1,46 @@
+        
+    {% load static %}
+    
+    <div class="col-12 col-sm-6 col-lg-4">
+        <div class="single-product-wrapper">
+            <!-- Product Image -->
+            <div class="product-img">
+            {% if item.cover_image %}
+                    <img src="{{ item.cover_image.url }}" alt="">
+                     {% else %}
+                        resim yok
+                    {% endif %}
+                    <!-- Hover Thumb -->
+                {% if item.hover_image %}
+                    <img class="hover-img" src="{{ item.hover_image.url }}" alt="">
+                     {% else %}
+                        resim yok
+             {% endif %}
+            <!-- Product Badge -->
+                <div class="product-badge offer-badge">
+                        <span>-30%</span>
+                            </div>
+                        <!-- Favourite -->
+                    <div class="product-favourite">
+                    <a href="#" class="favme fa fa-heart"></a>
+            </div>
+        </div>
+
+       <!-- Product Description -->
+         <div class="product-description">
+            <span>topshop</span>
+                <a href="single-product-details.html">
+            <h6>{{item.title}}</h6>
+         </a>
+        <p class="product-price"><span class="old-price">${{item.price}}</span> ${{item.salePrice}}</p>
+
+        <!-- Hover Content -->
+        <div class="hover-content">
+                <!-- Add to Cart -->
+        <div class="add-to-cart-btn">
+        <a href="/products/detail/{{ item.pk }}" class="btn essence-btn">Go Detail</a>
+        </div>
+        </div>
+        </div>
+      </div>
+  </div>

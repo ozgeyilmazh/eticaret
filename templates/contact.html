@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+ <div class="contact-area d-flex align-items-center">
+
+
+        <div class="container">
+            <div class="row">
+        
+                <div class="contact-info">
+                   {% for item in contact %}
+                    <h2>{{item.title}}</h2>
+                    <p>{{item.content}}</p>
+
+                    <div class="contact-address mt-50">
+                        <p><span>address:</span> {{item.address}}</p>
+                        <p><span>telephone:</span> {{item.phone}}</p>
+                        <p><a class="btn btn-warning" href="mailto:ozgeyilmzh@gmail.com">{{item.email}}</a></p>
+                    </div>
+                    
+                </div>
+                            {% if item.cover_image %}
+                                    <img src="{{ item.cover_image.url }}" class="w-50">
+                            {% else %}
+                                    resim yok
+                            {% endif %}
+                {% endfor %}
+            </div>
+            <br>
+            <hr>
+            <br>
+       
+        </div>
+    </div>
+{% endblock %}
+

@@ -1,0 +1,211 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- The above 4 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+    <!-- Title  -->
+    <title>Essence - Fashion Ecommerce Template</title>
+
+    <!-- Favicon  -->
+    <link rel="icon" href="{% static 'img/core-img/favicon.ico' %}">
+
+    <!-- Core Style CSS -->
+    <link rel="stylesheet" href="{% static 'css/core-style.css' %}">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+</head>
+
+<body>
+   <script>
+
+       $(function() {
+            $("#search_query").autocomplete({
+                source: "/search_auto/",
+                select: function (event, ui){
+                    AutoCompletedSelectHandler(event, ui)
+                },
+                minLength: 2,
+            });
+       });
+
+       function  AutoCompletedSelectHandler(event, ui){
+           var selectedObj = ui.item;
+       }
+
+
+    </script>
+    <!-- ##### Header Area Start ##### -->
+    <header class="header_area">
+        <div class="classy-nav-container breakpoint-off d-flex align-items-center justify-content-between">
+            <!-- Classy Menu -->
+            <nav class="classy-navbar" id="essenceNav">
+                <!-- Logo -->
+                <a class="nav-brand" href="/"><img src="{% static 'img/core-img/logo.png' %}" alt=""></a>
+                <!-- Navbar Toggler -->
+                <div class="classy-navbar-toggler">
+                    <span class="navbarToggler"><span></span><span></span><span></span></span>
+                </div>
+                <!-- Menu -->
+                <div class="classy-menu">
+                    <!-- close btn -->
+                    <div class="classycloseIcon">
+                        <div class="cross-wrap"><span class="top"></span><span class="bottom"></span></div>
+                    </div>
+                    <!-- Nav Start -->
+                    <div class="classynav">
+                        <ul>
+                            <li><a href="{% url 'products' %}">Shop</a>
+                                <div class="megamenu">
+                                    <ul class="single-mega cn-col-4">
+                                        <li class="title">Women's Collection</li>
+                                        {% for item in categories %}
+                                            {% if item.type == 'women' %}
+                                                <li><a href="{% url 'category_show' category_slug=item.slug %}">{{item.title}}</a></li>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </ul>
+                                    <ul class="single-mega cn-col-4">
+                                        <li class="title">Men's Collection</li>
+                                         {% for item in categories %}
+                                            {% if item.type == 'men' %}
+                                                <li><a href="{% url 'category_show' category_slug=item.slug %}">{{item.title}}</a></li>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </ul>
+                                    <ul class="single-mega cn-col-4">
+                                        <li class="title">All Collection</li>
+                                         {% for item in categories %}
+                                            {% if item.type == 'unisex' %}
+                                                <li><a href="{% url 'category_show' category_slug=item.slug %}">{{item.title}}</a></li>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </ul>
+                                    <div class="single-mega cn-col-4">
+                                        <img src="{% static 'img/bg-img/bg-6.jpg' %}" alt="">
+                                    </div>
+                                </div>
+                            </li>
+                            <li><a href="#">Pages</a>
+                                <ul class="dropdown">
+                                    <li><a href="/">Home</a></li>
+                                    <li><a href="{% url 'about' %}">About</a></li>
+
+                                </ul>
+                            </li>
+                            <li><a href="{% url 'post:blogpage' %}">Blog</a></li>
+                            <li><a href="{% url 'contact' %}">Contact</a></li>
+                        </ul>
+                    </div>
+                    <!-- Nav End -->
+                </div>
+            </nav>
+
+            <!-- Header Meta Data -->
+            <div class="header-meta d-flex clearfix justify-content-end">
+                <!-- Search Area -->
+                <div class="search-area">
+                    <form action="/search/" method="post">
+                       {% csrf_token %}
+                        <input type="search" name="search_query" id="search_query" placeholder="Type for search">
+                        <button type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
+                    </form>
+                </div>
+               
+                 {% if user.is_authenticated %}
+                        <!-- Favourite Area -->
+                        <div class="favourite-area">
+                            <a href="#"><img src="{% static 'img/core-img/heart.svg' %}" alt=""></a>
+                        </div>
+                        <div class="user-login-info">
+                            <a href="{% url 'user_login' %}"><img src="{% static 'img/core-img/user.svg' %}" alt=""></a>
+                        </div>
+                        <div class="user-login-info">
+                            <a href="{% url 'logout' %}">Çıkış <!-- Logout --></a>
+                        </div>
+                         <div class="cart-area">
+                        <a href="#" id="essenceCartBtn"><img src="{% static 'img/core-img/bag.svg' %}" alt=""> <span>{{ request.session.cart_items }}</span></a>
+                </div>
+                {% else %}
+                <!-- User Login Info -->
+                <div class="user-login-info">
+                    <a href="{% url 'login' %}"><img src="{% static 'img/core-img/user.svg' %}" alt=""></a>
+                </div>
+                <div class="user-login-info">
+                    <a href="{% url 'signup' %}">Sign Up</a>
+                </div>
+                {% endif %}
+
+               
+            </div>
+
+        </div>
+    </header>
+    <!-- ##### Header Area End ##### -->
+
+    <!-- ##### Right Side Cart Area ##### -->
+    <div class="cart-bg-overlay"></div>
+
+    <div class="right-side-cart-area">
+
+        <!-- Cart Button -->
+        <div class="cart-button">
+            <a href="#" id="rightSideCart"><img src="{% static 'img/core-img/bag.svg' %}" alt=""> <span>{{ request.session.cart_items }}</span></a>
+        </div>
+
+        <div class="cart-content d-flex">
+
+            <!-- Cart List Area -->
+            <div class="cart-list">
+                <!-- Single Cart Item -->
+                {% for item in shopcart %}
+                <div class="single-cart-item">
+                    <a href="#" class="product-image">
+                        {% if item.product.cover_image %}
+                             <img src="{{ item.product.cover_image.url }}" class="cart-thumb">
+                        {% else %}
+                                resim yok
+                        {% endif %}
+                        <!-- Cart Item Desc -->
+                        <div class="cart-item-desc">
+                          <span class="product-remove"><i class="fa fa-close" aria-hidden="true"></i></span>
+                            <span class="badge">Brand</span>
+                            <h6>{{item.product}}</h6>
+                            <p class="price">${{item.amount}}</p>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+
+            </div>
+
+            <!-- Cart Summary -->
+            <div class="cart-amount-summary">
+
+                <h2>Summary</h2>
+                <ul class="summary-table">
+                    <li><span>total:</span> <span>${{ cartotal }}</span></li>
+                </ul>
+                <div class="checkout-btn mt-100">
+                   <a href="{% url 'shopcart' %}" class="btn essence-btn">view Card</a>
+                    <a href="{% url 'checkout' %}" class="btn essence-btn">check out</a> 
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ##### Right Side Cart End ##### -->
+    {% if messages %}
+	    {% for message in messages %}
+		<div class="alert alert-{{ message.tags }}" role="alert">
+		{{ message }}
+		</div>
+		{% endfor %}
+    {% endif %}

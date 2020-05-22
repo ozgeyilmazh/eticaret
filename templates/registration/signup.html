@@ -1,0 +1,27 @@
+{% extends 'base.html' %} {% block content %}
+
+<div class="Lwrapper">
+    <br>
+    <br>
+    <br>
+    <form class="Lform-signin" method="POST">
+        {% csrf_token %}
+        <center>
+            <h2 class="Lform-signin-heading">Please Sign Up</h2>
+            <br> Email<br> {{ form.email }}
+            <br>
+            <br> Username<br> {{ form.username }}
+            <br>
+            <br> Password<br> {{ form.password }}
+            <br>
+            <br> Password Again<br> {{ form.confirm }}
+            <br>
+            <br>
+            <br>
+            <button class="btn btn-lg btn-secondary" type="submit"> Register </button>
+        </center>
+
+    </form>
+</div>
+
+{% endblock content %}

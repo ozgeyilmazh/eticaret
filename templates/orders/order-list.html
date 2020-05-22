@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+<br><br><br>
+<div class="container">
+   <div class="row">
+       <div class="<col-md-12></col-md-12>">
+           <h1>Welcome {{request.user}}</h1>
+           <br>
+       </div>
+   </div>
+   <hr>
+    <div class="row">
+        <div class="col-md-3">
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item"><a href="{% url 'shopcart' %}">Sepetim</a></li>
+              <li class="list-group-item"><a href="{% url 'order_index' %}">Siparişlerim</a></li>
+            </ul>
+        </div>
+        <div class="col-md-9">
+            
+  <h1 style="text-align : center">Siparişlerim</h1>
+   <div class="container">
+              <div class="row">
+                <div class="col-12">
+                    <table class="table table-image">
+                      <thead>
+                        <tr>
+                          <th scope="col">    Adı</th>
+                          <th scope="col">    Soyadı</th>
+                          <th scope="col">    Cep Telefonu</th>
+                          <th scope="col">    Adres</th>
+                          <th scope="col">    Detay</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                     {% for item in orders %}
+                        <tr>
+                              <td>{{item.name}}</td>
+                              <td>{{item.surname}}</td>
+                              <td>{{item.phone}}</td>
+                              <td>{{item.address}}</td>
+                              <td><a href="/orders/detail/{{item.id}}" class="btn btn-warning">Detail</a></td>
+
+                        </tr>
+                         {% endfor %}
+
+                      </tbody>
+                    </table>   
+                </div>
+              </div>
+            </div>
+                    </div>
+                </div>    
+            </div>
+
+{% endblock %}
