@@ -56,8 +56,7 @@
                                     <input class="input" type="text" name="phone"
                                        placeholder="Telephone" required id="id_phone">
                                 </div>
-
-                                 <button type="submit" class="btn essence-btn">Place Order</button>
+                                <button type="submit" class="btn essence-btn">Place Order</button>
                                 <!--<div class="col-12">
                                     <div class="custom-control custom-checkbox d-block mb-2">
                                         <input type="checkbox" class="custom-control-input" id="customCheck1">
@@ -74,6 +73,7 @@
                                 </div>-->
                             </div>
                         </form>
+
                     </div>
                 </div>
 
@@ -89,6 +89,7 @@
                             <li style="font-size:15px;"><span>Product</span> <span>Total</span></li>
                             <li style="font-size:15px;"><span>Shipping</span> <span>Free</span></li>
                             <li style="color:red; font-size:20px" ><span>Total</span> <span>${{cartotal}}</span></li>
+                            <li><button class="btn essence-btn"> <a href="{%  url 'payment'  %}"> Payment </a>  </button></li>
                         </ul>
 
                           <!--  <div id="accordion" role="tablist" class="mb-4">

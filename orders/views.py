@@ -12,6 +12,15 @@ from .models import (
 )
 from .forms import ShopCartForm, OrderForm
 
+
+import iyzipay
+from django.views.decorators.http import require_http_methods
+from django.views.decorators.csrf import csrf_exempt
+import json
+import requests
+from django.urls import reverse
+
+
 # Sipariş Listeleme
 @login_required(login_url="login")
 def index(request):
@@ -36,6 +45,7 @@ def user_login(request):
     context['orders'] = orders
 
     return render(request, 'orders/user_login.html', context)
+
 
 # Sepete ürün Ekliyor
 @login_required(login_url="login")
@@ -159,3 +169,162 @@ def order_detail(request, id):
     context['items'] = items
 
     return render(request, 'orders/order-detail.html', context)
+
+
+api_key = 'sandbox-etkBOaBAec7Zh6jLDL59Gng0xJV2o1tV'
+secret_key = 'sandbox-uC9ysXfBn2syo7ZMOW2ywhYoc9z9hTHh'
+base_url = 'sandbox-api.iyzipay.com'
+
+
+options = {
+    'api_key': api_key,
+    'secret_key': secret_key,
+    'base_url': base_url
+}
+
+
+sozlukToken = list()
+
+
+def payment(request):
+    context = dict()
+
+    sepet = ShopCart.objects.all()
+    odeme = list()
+    for i in sepet:
+        odeme.append(i.user)
+        odeme.append(i.product)
+        odeme.append(i.quantity * i.product.salePrice)
+        print("------------", odeme)
+
+    buyer = {
+        'id': 'BY789',
+        'name': 'John',
+        'surname': 'Doe',
+        'gsmNumber': '+905350000000',
+        'email': 'email@email.com',
+        'identityNumber': '74300864791',
+        'lastLoginDate': '2015-10-05 12:43:35',
+        'registrationDate': '2013-04-21 15:12:09',
+        'registrationAddress': 'Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1',
+        'ip': '85.34.78.112',
+        'city': 'Istanbul',
+        'country': 'Turkey',
+        'zipCode': '34732'
+    }
+
+    address = {
+        'contactName': 'Jane Doe',
+        'city': 'Istanbul',
+        'country': 'Turkey',
+        'address': 'Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1',
+        'zipCode': '34732'
+    }
+
+    basket_items = [
+        {
+            'id': 'BI101',
+            'name': 'Binocular',
+            'category1': 'Collectibles',
+            'category2': 'Accessories',
+            'itemType': 'PHYSICAL',
+            'price': '50.0'
+        },
+
+    ]
+
+
+    # conversationId bunun için time modülü ile anlık değer üretiyorum. Yolluyorum.
+    request = {
+        'locale': 'tr',
+        'conversationId': '123456789',
+        'price': odeme[2],
+        'paidPrice': odeme[2],
+        'currency': 'TRY',
+        'basketId': 'B67832',
+        'paymentGroup': 'PRODUCT',
+        "callbackUrl": "http://localhost:8007/orders/result/",
+        "enabledInstallments": ['2', '3', '6', '9'],
+        'buyer': buyer,
+        'shippingAddress': address,
+        'billingAddress': address,
+        'basketItems': basket_items,
+        #'debitCardAllowed': True
+    }
+
+    checkout_form_initialize = iyzipay.CheckoutFormInitialize().create(request, options)
+
+    #print(checkout_form_initialize.read().decode('utf-8'))
+    page = checkout_form_initialize
+    header = {'Content-Type': 'application/json'}
+    content = checkout_form_initialize.read().decode('utf-8')
+    json_content = json.loads(content)
+    print("------------------------")
+    print(json_content)
+    print("------------------------")
+    print("gelen veri tipi", type(json_content))
+    print("************************")
+    print(json_content["token"])
+    print("************************")
+    sozlukToken.append(json_content["token"])
+    return HttpResponse(json_content["checkoutFormContent"])
+
+
+    #print(json_content["checkoutFormContent"])
+    #context['payment'] = json_content["checkoutFormContent"]
+    #template = 'payment.html'
+    #return render(request, template, context)
+
+
+@require_http_methods(['POST'])
+@csrf_exempt
+def result(request):
+    context = dict()
+
+    url = request.META.get('order_index')
+    print("result içindeki token -----", sozlukToken)
+    request = {
+        'locale': 'tr',
+        'conversationId': '123456789',
+        'token': sozlukToken[0]
+    }
+    checkout_form_result = iyzipay.CheckoutForm().retrieve(request, options)
+    print("************************")
+    print(type(checkout_form_result))
+    result = checkout_form_result.read().decode('utf-8')
+    print("************************")
+    print(sozlukToken[0])   # Form oluşturulduğunda
+    print("************************")
+    sonuc = json.loads(result, object_pairs_hook=list)
+    #print(sonuc[0][1])  # İşlem sonuç Durumu dönüyor
+    #print(sonuc[5][1])   # Test ödeme tutarı
+    print("************************")
+    for i in sonuc:
+        print(i)
+    print("************************")
+    if sonuc[0][1] == 'success':
+        context['success'] = 'Başarılı İŞLEMLER'
+        return HttpResponseRedirect(reverse('success'), context)
+
+    elif sonuc[0][1] == 'failure':
+        context['failure'] = 'Başarısız'
+        return HttpResponseRedirect(reverse('failure'), context)
+
+    return HttpResponse(url)
+
+
+def success(request):
+    context = dict()
+    context['success'] = 'İşlem Başarılı'
+
+    template = 'payment/ok.html'
+    return render(request, template, context)
+
+
+def failure(request):
+    context = dict()
+    context['fail'] = 'İşlem Başarısız'
+
+    template = 'payment/fail.html'
+    return render(request, template, context)
+

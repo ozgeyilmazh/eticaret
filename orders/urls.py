@@ -7,6 +7,11 @@ from .views import (
     order_detail,
     index,
     user_login,
+    payment,
+    result,
+    success,
+    failure,
+
 )
 
 
@@ -18,5 +23,11 @@ urlpatterns = [
     path('deletefromcart/<int:id>/', shop_cart_delete, name='deletefromcart'),
     path('detail/<int:id>/', order_detail, name='order_detail'),
     path('checkout/', shop_cart_checkout, name='checkout'),
+
+
+    path('payment/', payment, name='payment'),
+    path('result/', result, name='result'),
+    path('success/', success, name='success'),
+    path('failure/', failure, name='failure'),
 
 ]
